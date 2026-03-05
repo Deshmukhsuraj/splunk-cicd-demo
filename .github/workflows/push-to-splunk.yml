@@ -1,0 +1,29 @@
+name: Push Logs to Splunk
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'logs/**'
+
+jobs:
+  send-to-splunk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send logs to Splunk HEC
+        env:
+          SPLUNK_HEC_TOKEN: ${{ secrets.SPLUNK_HEC_TOKEN }}
+          SPLUNK_HOST: ${{ secrets.SPLUNK_HOST }}
+        run: |
+          echo "Starting to send logs to Splunk..."
+          while IFS= read -r line; do
+            curl -k "https://$SPLUNK_HOST:8088/services/collector/event" \
+              -H "Authorization: Splunk $SPLUNK_HEC_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"event\": \"$line\", \"sourcetype\": \"app_logs\", \"index\": \"main\"}"
+          done < logs/app.log
+          echo "✅ All logs sent to Splunk!"
