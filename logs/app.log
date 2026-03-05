@@ -3,3 +3,5 @@
 2026-03-05 10:02:30 ERROR Disk usage above 90% on /dev/sda1
 2026-03-05 10:03:45 INFO  Backup completed successfully
 2026-03-05 10:04:10 WARN  High CPU usage detected: 87%
+2026-03-05 11:00:00 ERROR Unauthorized access attempt detected from 45.33.32.156
+2026-03-05 11:01:00 INFO  Pipeline triggered successfully via CI/CD!
